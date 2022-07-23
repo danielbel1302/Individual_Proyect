@@ -29,6 +29,14 @@ router.get("/countries", async (req, res) => {
     }
   }
   try {
+    const countries = await Country.findAll();
+    if (countries.length !== 0) {
+      return res.json(countries);
+    }
+  } catch (error) {
+    return res.status(404).send("Could not read the countries of the DB");
+  }
+  try {
     const response = await axios.get("https://restcountries.com/v3/all");
     const allCountries = response.data;
     for (const property in allCountries) {
@@ -45,7 +53,9 @@ router.get("/countries", async (req, res) => {
             population: allCountries[property].population,
           });
         } catch (error) {
-          return res.status(404).send("The countries could not be loaded in the DB");
+          return res
+            .status(404)
+            .send("The countries could not be loaded in the DB");
         }
       }
     }
@@ -99,7 +109,7 @@ router.post("/activities", async (req, res) => {
         duration,
         season,
       });
-      const countryId=idCountry.id;
+      const countryId = idCountry.id;
       try {
         await activity.addCountry(countryId);
         return res.status(201).send("The activity was created successfully");
@@ -107,7 +117,9 @@ router.post("/activities", async (req, res) => {
         return res.status(404).send("Failed to set DB");
       }
     } catch (error) {
-      return res.status(404).send("Could not read the tourist activity of the DB");
+      return res
+        .status(404)
+        .send("Could not read the tourist activity of the DB");
     }
   } catch (error) {
     return res.status(404).send("Could not read the countries of the DB");
