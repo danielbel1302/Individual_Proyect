@@ -10,6 +10,16 @@ export function getCountries() {
   };
 }
 
-export function setLoading() {
-  return { type: "SET_LOADING" };
+export function getCountry(country) {
+  return function (dispatch) {
+    return axios
+      .get(`http://localhost:3001/countries?name=${country}`)
+      .then(function (response) {
+        dispatch({ type: "GET_COUNTRY", payload: response.data });
+      });
+  };
+}
+
+export function loadingCountry() {
+  return { type: "LOADING_COUNTRY" };
 }
