@@ -1,5 +1,9 @@
 import axios from "axios";
 
+export function setContry() {
+  return { type: "SET_COUNTRY" };
+}
+
 export function getCountries() {
   return function (dispatch) {
     return axios
@@ -20,6 +24,10 @@ export function getCountry(country) {
   };
 }
 
-export function loadingCountry() {
-  return { type: "LOADING_COUNTRY" };
+export function orderCountries(countries) {
+  return { type: "GET_COUNTRIES", payload: countries };
+}
+
+export function setLoading() {
+  return { type: "SET_LOADING" };
 }

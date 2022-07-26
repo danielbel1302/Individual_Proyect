@@ -5,13 +5,9 @@ import HomePage from "./HomePage.jsx";
 
 export default function LoadingPage() {
   let loading = useSelector((state) => state.loading);
-  let loadingCountry = useSelector((state) => state.loadingCountry);
-
   const dispatch = useDispatch();
-
   useEffect(() => {
-    !loadingCountry && loading && dispatch(getCountries());
+    loading && dispatch(getCountries());
   });
-
-  return <>{loadingCountry || loading ? <h1>Loading...</h1> : <HomePage />}</>;
+  return <>{loading ? <h1>Loading...</h1> : <HomePage />}</>;
 }

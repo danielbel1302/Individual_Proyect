@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getCountry, loadingCountry } from "../Actions/actions";
+import {
+  getCountry,
+  orderCountries,
+  setContry,
+  setLoading,
+} from "../Actions/actions";
 import style from "./HomePage.module.css";
 
 export default function HomePage() {
@@ -27,7 +32,6 @@ export default function HomePage() {
     "Wine Tourism",
   ];
   const handleOnClick = () => {
-    dispatch(loadingCountry());
     dispatch(getCountry(country));
   };
   const handleOnChange = (e) => {
@@ -58,13 +62,56 @@ export default function HomePage() {
     continents.filter((continent) => isChecked[continent] === true);
   let newCountries = () =>
     countries.filter((country) => country.continent.includes(continent()[0]));
+  const handleOnClickAll = () => {
+    dispatch(setContry());
+  };
+  const handleOnKeyDown = (e) => {
+    e.key === "Enter" && handleOnClick();
+  };
+  const handleOrder = (e) => {
+    let value = 0;
+    e.target.value === "upward C" ? (value = 1) : (value = -1);
+    const newCountries = countries.sort(function compareName(a, b) {
+      if (a.name > b.name) {
+        return value;
+      }
+      if (a.name < b.name) {
+        return -value;
+      }
+      return 0;
+    });
+    dispatch(setLoading());
+    dispatch(orderCountries(newCountries));
+  };
+  const handleOrderP = (e) => {
+    let value = 0;
+    e.target.value === "upward P" ? (value = 1) : (value = -1);
+    const newCountries = countries.sort(function compareName(a, b) {
+      if (a.population > b.population) {
+        return value;
+      }
+      if (a.population < b.population) {
+        return -value;
+      }
+      return 0;
+    });
+    dispatch(setLoading());
+    dispatch(orderCountries(newCountries));
+  };
+  let [sort, setSort] = useState(false);
+  const handleSort = () => {
+    setSort(!sort);
+  };
+
   return (
     <>
       <div>HomePage</div>
+      <button onClick={handleOnClickAll}>Show all</button>
       <input
         type="search"
         placeholder="Search country..."
         onChange={handleOnChange}
+        onKeyDown={handleOnKeyDown}
       />
       <button onClick={handleOnClick}>Search</button>
       <div className={style.cnt}>
@@ -101,6 +148,25 @@ export default function HomePage() {
                     </span>
                   );
                 })}
+              <button value="Sort" onClick={handleSort}>
+                Sort
+              </button>
+              {sort && (
+                <>
+                  <button value="upward C" onClick={handleOrder}>
+                    Sort countries ascending
+                  </button>
+                  <button value="falling C" onClick={handleOrder}>
+                    Sort Countries Descending
+                  </button>
+                  <button value="upward P" onClick={handleOrderP}>
+                    Sort population ascending
+                  </button>
+                  <button value="falling P" onClick={handleOrderP}>
+                    Sort population Descending
+                  </button>
+                </>
+              )}
             </>
           )}
         </div>
@@ -138,6 +204,9 @@ export default function HomePage() {
           </div>
         )}
       </div>
+      <span>Page 0</span>
+      <button>Preview</button>
+      <button>Next</button>
     </>
   );
 }

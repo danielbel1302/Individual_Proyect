@@ -1,16 +1,20 @@
 const INITIAL_STATE = {
   loading: true,
-  loadingCountry: false,
   countries: [],
   country: {},
 };
 
 function reducer(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case "LOADING_COUNTRY":
+    case "SET_LOADING":
       return {
         ...state,
-        loadingCountry: true,
+        loading: true,
+      };
+    case "SET_COUNTRY":
+      return {
+        ...state,
+        country: {},
       };
     case "GET_COUNTRIES":
       return {
@@ -22,7 +26,6 @@ function reducer(state = INITIAL_STATE, action) {
       return {
         ...state,
         country: action.payload,
-        loadingCountry: false,
       };
     default:
       return { ...state };
