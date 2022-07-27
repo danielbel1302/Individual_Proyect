@@ -31,3 +31,15 @@ export function orderCountries(countries) {
 export function setLoading() {
   return { type: "SET_LOADING" };
 }
+
+export function next() {
+  return { type: "NEXT" };
+}
+
+export function preview() {
+  return { type: "PREVIEW" };
+}
+
+export function reset() {
+  return { type: "RESET" };
+}

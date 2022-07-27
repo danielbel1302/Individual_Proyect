@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   getCountry,
+  next,
   orderCountries,
+  preview,
+  reset,
   setContry,
   setLoading,
 } from "../Actions/actions";
@@ -21,6 +24,9 @@ export default function HomePage() {
     Oceania: false,
   });
   let countries = useSelector((state) => state.countries);
+  let start = useSelector((state) => state.start);
+  let end = useSelector((state) => state.end);
+  let countriesSlice = countries.slice(start, end);
   let countryFound = useSelector((state) => state.country);
   const continents = ["Africa", "America", "Asia", "Europe", "Oceania"];
   const excursions = [
@@ -31,13 +37,23 @@ export default function HomePage() {
     "Nature",
     "Wine Tourism",
   ];
+  let [show, setShow] = useState(true);
   const handleOnClick = () => {
     dispatch(getCountry(country));
+    setShow(false);
   };
   const handleOnChange = (e) => {
     setCountry(e.target.value);
   };
   const handleFilter = () => {
+    setOptions({ continent: false, excursions: false });
+    setIsChecked({
+      Africa: false,
+      America: false,
+      Asia: false,
+      Europe: false,
+      Oceania: false,
+    });
     setFilter(!filter);
   };
   const handleOptions = (e) => {
@@ -52,6 +68,8 @@ export default function HomePage() {
         });
   };
   const handleOnChangeCheck = (e) => {
+    dispatch(reset());
+    setPage(1);
     e.target.value in isChecked &&
       setIsChecked({
         ...isChecked,
@@ -61,8 +79,11 @@ export default function HomePage() {
   let continent = () =>
     continents.filter((continent) => isChecked[continent] === true);
   let newCountries = () =>
-    countries.filter((country) => country.continent.includes(continent()[0]));
+    countries
+      .filter((country) => country.continent.includes(continent()[0]))
+      .slice(start, end);
   const handleOnClickAll = () => {
+    setShow(true);
     dispatch(setContry());
   };
   const handleOnKeyDown = (e) => {
@@ -102,6 +123,29 @@ export default function HomePage() {
   const handleSort = () => {
     setSort(!sort);
   };
+  const handlePrev = () => {
+    if (start > 0) {
+      dispatch(setLoading());
+      dispatch(preview());
+      setPage(page - 1);
+    }
+  };
+  const handleNext = () => {
+    if (!options.continent && !options.excursions && end < countries.length) {
+      dispatch(setLoading());
+      dispatch(next());
+      setPage(page + 1);
+    } else {
+      let result = end - start;
+      let length = newCountries().length;
+      if (result === length) {
+        dispatch(setLoading());
+        dispatch(next());
+        setPage(page + 1);
+      }
+    }
+  };
+  let [page, setPage] = useState(1);
 
   return (
     <>
@@ -192,7 +236,7 @@ export default function HomePage() {
           </div>
         ) : (
           <div className={style.grid}>
-            {countries.map((country) => {
+            {countriesSlice.map((country) => {
               return (
                 <div className={style.card} key={country.id}>
                   <img src={country.flagImage} alt="flag" />
@@ -204,9 +248,13 @@ export default function HomePage() {
           </div>
         )}
       </div>
-      <span>Page 0</span>
-      <button>Preview</button>
-      <button>Next</button>
+      {show && (
+        <>
+          <span>Page {page}</span>
+          <button onClick={handlePrev}>Preview</button>
+          <button onClick={handleNext}>Next</button>
+        </>
+      )}
     </>
   );
 }
