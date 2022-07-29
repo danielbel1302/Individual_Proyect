@@ -1,5 +1,19 @@
 import axios from "axios";
 
+export function resetInfo() {
+  return { type: "RESET_INFO" };
+}
+
+export function getCountryInfo(idPais) {
+  return function (dispatch) {
+    return axios
+      .get(`http://localhost:3001/countries/${idPais}`)
+      .then(function (response) {
+        dispatch({ type: "GET_COUNTRY_INFO", payload: response.data });
+      });
+  };
+}
+
 export function setContry() {
   return { type: "SET_COUNTRY" };
 }

@@ -4,10 +4,24 @@ const INITIAL_STATE = {
   end: 9,
   countries: [],
   country: {},
+  info: {},
+  loadingInfo: true,
 };
 
 function reducer(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case "GET_COUNTRY_INFO":
+      return {
+        ...state,
+        info: action.payload,
+        loadingInfo: false,
+      };
+    case "RESET_INFO":
+      return {
+        ...state,
+        info: {},
+        loadingInfo: true,
+      };
     case "RESET":
       return {
         ...state,

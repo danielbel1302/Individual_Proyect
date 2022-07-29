@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import {
   getCountry,
   next,
@@ -217,7 +218,9 @@ export default function HomePage() {
         {Object.entries(countryFound).length !== 0 ? (
           <div className={style.grid}>
             <div className={style.card} key={countryFound.id}>
-              <img src={countryFound.flagImage} alt="flag" />
+              <Link to={`/home/${countryFound.id}`}>
+                <img src={countryFound.flagImage} alt="flag" />
+              </Link>
               <span>{countryFound.name}</span>
               <span>{countryFound.continent}</span>
             </div>
@@ -227,7 +230,9 @@ export default function HomePage() {
             {newCountries().map((country) => {
               return (
                 <div className={style.card} key={country.id}>
-                  <img src={country.flagImage} alt="flag" />
+                  <Link to={`/home/${country.id}`}>
+                    <img src={country.flagImage} alt="flag" />
+                  </Link>
                   <span>{country.name}</span>
                   <span>{country.continent}</span>
                 </div>
@@ -239,7 +244,9 @@ export default function HomePage() {
             {countriesSlice.map((country) => {
               return (
                 <div className={style.card} key={country.id}>
-                  <img src={country.flagImage} alt="flag" />
+                  <Link to={`/home/${country.id}`}>
+                    <img src={country.flagImage} alt="flag" />
+                  </Link>
                   <span>{country.name}</span>
                   <span>{country.continent}</span>
                 </div>

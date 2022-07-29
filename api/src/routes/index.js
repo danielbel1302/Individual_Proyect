@@ -11,6 +11,27 @@ const router = Router();
 // Configurar los routers
 // Ejemplo: router.use('/auth', authRouter);
 
+router.get("/countries/:idPais", async (req, res) => {
+  const { idPais } = req.params;
+  try {
+    const country = await Country.findByPk(idPais, {
+      include: [
+        {
+          model: TouristActivity,
+          attributes: ["name", "difficulty", "duration", "season"],
+          through: {
+            attributes: [],
+          },
+        },
+      ],
+    });
+    if (country) return res.json(country);
+    return res.send("The ID entered does not exist");
+  } catch (error) {
+    return res.status(404).send("Could not read the countries of the DB");
+  }
+});
+
 router.get("/countries", async (req, res) => {
   const { name } = req.query;
   if (name) {
@@ -67,27 +88,6 @@ router.get("/countries", async (req, res) => {
     }
   } catch (error) {
     return res.status(404).send("Failed to make API request");
-  }
-});
-
-router.get("/countries/:idPais", async (req, res) => {
-  const { idPais } = req.params;
-  try {
-    const country = await Country.findByPk(idPais, {
-      include: [
-        {
-          model: TouristActivity,
-          attributes: ["name", "difficulty", "duration", "season"],
-          through: {
-            attributes: [],
-          },
-        },
-      ],
-    });
-    if (country) return res.json(country);
-    return res.send("The ID entered does not exist");
-  } catch (error) {
-    return res.status(404).send("Could not read the countries of the DB");
   }
 });
 

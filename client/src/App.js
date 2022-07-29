@@ -1,18 +1,26 @@
 import MainPage from "./Components/MainPage.jsx";
 import "./App.css";
 import "normalize.css";
-import { Route } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import LoadingPage from "./Components/LoadingPage.jsx";
+import Country from "./Components/Country.jsx";
 
 function App() {
   return (
     <div className="App">
-      <Route exact path="/">
-        <MainPage />
-      </Route>
-      <Route exact path="/homePage">
-        <LoadingPage />
-      </Route>
+      <Switch>
+        <Route exact path="/">
+          <MainPage />
+        </Route>
+        <Route
+          exact
+          path="/home/:id"
+          render={({ match }) => <Country match={match}></Country>}
+        />
+        <Route path="/home">
+          <LoadingPage />
+        </Route>
+      </Switch>
     </div>
   );
 }
