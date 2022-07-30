@@ -1,0 +1,16 @@
+.name {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.inLineFlex {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding-left: 25px;
+  padding-right: 25px;
+}
+.selector {
+  display: inline;
+  padding-right: 10px;
+}

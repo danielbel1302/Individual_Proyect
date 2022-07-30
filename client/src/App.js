@@ -4,6 +4,7 @@ import "normalize.css";
 import { Route, Switch } from "react-router-dom";
 import LoadingPage from "./Components/LoadingPage.jsx";
 import Country from "./Components/Country.jsx";
+import CreateActivity from "./Components/CreateActivity.jsx";
 
 function App() {
   return (
@@ -11,6 +12,9 @@ function App() {
       <Switch>
         <Route exact path="/">
           <MainPage />
+        </Route>
+        <Route exact path="/home/create">
+          <CreateActivity />
         </Route>
         <Route
           exact

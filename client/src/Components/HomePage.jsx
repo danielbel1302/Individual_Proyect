@@ -159,6 +159,9 @@ export default function HomePage() {
         onKeyDown={handleOnKeyDown}
       />
       <button onClick={handleOnClick}>Search</button>
+      <Link to={`/home/create`}>
+        <button>Create tourist activity</button>
+      </Link>
       <div className={style.cnt}>
         <div className={style.filtro}>
           <button onClick={handleFilter}>Filters</button>
